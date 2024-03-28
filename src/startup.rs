@@ -3,6 +3,7 @@ use std::net::TcpListener;
 use actix_web::{App, HttpServer, web};
 use actix_web::dev::Server;
 use sqlx::{Pool, Postgres};
+use actix_web::middleware::Logger;
 
 use crate::routes::{health_check, subscribe};
 
@@ -13,6 +14,7 @@ pub fn run(
     let connection = web::Data::new(connection_pool);
     let server = HttpServer::new(move || {
         App::new()
+            .wrap(Logger::default())
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
             .app_data(connection.clone())
