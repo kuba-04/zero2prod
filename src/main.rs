@@ -1,6 +1,5 @@
 use std::net::TcpListener;
 
-use sqlx::PgPool;
 use sqlx::postgres::PgPoolOptions;
 
 use zero2prod::configuration::get_configuration;
