@@ -1,6 +1,5 @@
-FROM lukemathwalker/cargo-chef:latest-rust-1.72.0 as chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.77.2 as chef
 WORKDIR /app
-RUN apt update && apt install lld clang -y
 
 FROM chef as planner
 COPY . .
@@ -19,7 +18,7 @@ RUN cargo build --release --bin zero2prod
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 RUN apt-get update -y \
-    && apt-get install -y --no-install-recommends openssl ca-certificates \
+    && apt-get install -y --no-install-recommends openssl \
     # Clean up
     && apt-get autoremove -y \
     && apt-get clean -y \
