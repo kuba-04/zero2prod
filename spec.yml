@@ -1,3 +1,4 @@
+# TODO: issues with digital ocean, building with github now
 name: zero2prod
 region: fra
 services:

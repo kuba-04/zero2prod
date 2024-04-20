@@ -1,5 +1,4 @@
 use std::convert::{TryFrom, TryInto};
-use std::ops::{Deref, DerefMut};
 use serde_aux::field_attributes::deserialize_number_from_string;
 use sqlx::ConnectOptions;
 use sqlx::postgres::{PgConnectOptions, PgSslMode};
