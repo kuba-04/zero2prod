@@ -3,7 +3,8 @@ use chrono::Utc;
 use sqlx::PgPool;
 use sqlx::types::{chrono, uuid};
 use uuid::Uuid;
-use crate::domain::{NewSubscriber, SubscriberName};
+use crate::domain::new_subscriber::NewSubscriber;
+use crate::domain::subscriber_name::SubscriberName;
 
 #[tracing::instrument(
     name = "Adding a new subscriber",
