@@ -111,6 +111,27 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
 }
 
 #[actix_rt::test]
+async fn subscribe_returns_a_200_when_fields_are_present_but_empty() {
+    // Arrange
+    let app = spawn_app().await;
+    let client = reqwest::Client::new();
+    let body = "name=&email=ursula_le_guin%40gmail.com";
+
+    // Act
+    let response = client
+        .post(&format!("{}/subscriptions", &app.address))
+        .header("Content-Type", "application/x-www-form-urlencoded")
+        .body(body)
+        .send()
+        .await
+        .expect("Failed to execute request.");
+
+    // Assert
+    assert_eq!(400, response.status().as_u16()
+    );
+}
+
+#[actix_rt::test]
 async fn subscribe_returns_a_400_when_data_is_missing() {
     // Arrange
     let app = spawn_app().await;
