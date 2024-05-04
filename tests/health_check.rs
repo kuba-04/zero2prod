@@ -132,14 +132,16 @@ async fn subscribe_returns_a_200_when_fields_are_present_but_empty() {
 }
 
 #[actix_rt::test]
-async fn subscribe_returns_a_400_when_data_is_missing() {
+async fn subscribe_returns_a_400_when_data_is_missing_or_invalid() {
     // Arrange
     let app = spawn_app().await;
     let client = reqwest::Client::new();
     let test_cases = vec![
         ("name=le%20guin", "missing the email"),
         ("email=ursula_le_guin%40gmail.com", "missing the name"),
-        ("", "missing both name and email")
+        ("", "missing both name and email"),
+        ("name=&email=ursula_le_guin%40gmail.com", "invalid name"),
+        ("name=le%20guin&email=ursula_le_guin.com", "invalid email"),
     ];
     for (invalid_body, error_message) in test_cases {
 
