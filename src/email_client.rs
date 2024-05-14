@@ -8,13 +8,12 @@ pub struct EmailClient {
     base_url: String,
     sender: SubscriberEmail,
     authorization_token: String,
-    timeout: Duration
 }
 
 impl EmailClient {
     pub fn new(base_url: String, sender: SubscriberEmail, authorization_token: String, timeout: Duration) -> Self {
         let http_client = Client::builder()
-            .timeout(std::time::Duration::from_secs(10))
+            .timeout(timeout)
             .build()
             .unwrap();
         Self {
@@ -22,7 +21,6 @@ impl EmailClient {
             base_url,
             sender,
             authorization_token,
-            timeout,
         }
     }
 
@@ -69,7 +67,6 @@ mod tests {
     use fake::{Fake, Faker};
     use fake::faker::internet::en::SafeEmail;
     use fake::faker::lorem::en::{Paragraph, Sentence};
-    use tracing_subscriber::fmt::writer::MakeWriterExt;
     use wiremock::{Mock, MockServer, Request, ResponseTemplate};
     use wiremock::matchers::{any, header, method, path};
     use wiremock::matchers::header_exists;
