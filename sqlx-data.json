@@ -9,8 +9,7 @@
           "Uuid",
           "Text",
           "Text",
-          "Timestamptz",
-          "Text"
+          "Timestamptz"
         ]
       }
     },
