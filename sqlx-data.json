@@ -9,11 +9,10 @@
           "Uuid",
           "Text",
           "Text",
-          "Timestamptz",
-          "Text"
+          "Timestamptz"
         ]
       }
     },
-    "query": "\n        INSERT INTO subscriptions (id, email, name, subscribed_at, status)\n        VALUES ($1, $2, $3, $4, $5)\n        "
+    "query": "\n        INSERT INTO subscriptions (id, email, name, subscribed_at, status)\n        VALUES ($1, $2, $3, $4, 'confirmed')\n        "
   }
 }
