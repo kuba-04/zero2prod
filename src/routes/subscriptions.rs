@@ -1,13 +1,13 @@
-use actix_web::{HttpResponse, web};
-use actix_web::web::Form;
-use chrono::Utc;
-use sqlx::PgPool;
-use sqlx::types::{chrono, uuid};
-use uuid::Uuid;
 use crate::domain::new_subscriber::NewSubscriber;
-use crate::domain::subscriber_name::SubscriberName;
 use crate::domain::subscriber_mail::SubscriberEmail;
+use crate::domain::subscriber_name::SubscriberName;
+use actix_web::web::Form;
+use actix_web::{web, HttpResponse};
+use sqlx::types::{chrono, uuid};
+use sqlx::PgPool;
 use std::convert::{TryFrom, TryInto};
+use chrono::Utc;
+use uuid::Uuid;
 
 #[tracing::instrument(
     name = "Adding a new subscriber",
@@ -17,18 +17,14 @@ use std::convert::{TryFrom, TryInto};
         subscriber_name = % form.name
     )
 )]
-pub async fn subscribe(
-    form: Form<FormData>,
-    pool: web::Data<PgPool>,
-) -> HttpResponse {
+pub async fn subscribe(form: Form<FormData>, pool: web::Data<PgPool>) -> HttpResponse {
     let new_subscriber = match form.0.try_into() {
         Ok(form) => form,
         Err(_) => return HttpResponse::BadRequest().finish(),
     };
-    match insert_subscriber(&pool, &new_subscriber).await
-    {
+    match insert_subscriber(&pool, &new_subscriber).await {
         Ok(_) => HttpResponse::Ok().finish(),
-        Err(_) => HttpResponse::InternalServerError().finish()
+        Err(_) => HttpResponse::InternalServerError().finish(),
     }
 }
 
@@ -38,7 +34,7 @@ impl TryFrom<FormData> for NewSubscriber {
     fn try_from(value: FormData) -> Result<Self, Self::Error> {
         let name = SubscriberName::parse(value.name)?;
         let email = SubscriberEmail::parse(value.email)?;
-        Ok(NewSubscriber { email, name, })
+        Ok(NewSubscriber { email, name })
     }
 }
 
@@ -61,12 +57,12 @@ async fn insert_subscriber(
         Utc::now(),
         "confirmed"
     )
-        .execute(pool)
-        .await
-        .map_err(|e| {
-            tracing::error!("Failed to execute query: {:?}", e);
-            e
-        })?;
+    .execute(pool)
+    .await
+    .map_err(|e| {
+        tracing::error!("Failed to execute query: {:?}", e);
+        e
+    })?;
     Ok(())
 }
 

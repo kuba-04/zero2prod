@@ -70,6 +70,6 @@ impl Application {
 
 pub fn get_connection_pool(configuration: &DatabaseSettings) -> Pool<Postgres> {
     PgPoolOptions::new()
-        .connect_timeout(std::time::Duration::from_secs(2))
+        // .connect_timeout(std::time::Duration::from_secs(2))
         .connect_lazy_with(configuration.with_db())
 }
